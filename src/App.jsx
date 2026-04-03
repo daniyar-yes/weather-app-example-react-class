@@ -1,4 +1,4 @@
-import WeatherPage from "./AnyOtherPage/AnyOtherPage"
+import WeatherPage from "./WeatherPage/WeatherPage"
 
 
 function App() {
