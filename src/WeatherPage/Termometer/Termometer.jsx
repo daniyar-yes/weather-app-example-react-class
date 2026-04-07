@@ -1,58 +1,82 @@
 import React from "react";
 
-/** Padding around current so scale min/max bracket the reading (fallback when no forecast min/max). */
+function cToF(c) {
+  return (c * 9) / 5 + 32;
+}
 
+const Termometer = ({ temperature }) => {
+  const { tempC, tempF } = temperature || {};
 
-function ThermometerScale({ unit, current, min, max, label }) {
-  const vbW = 72;
+  const minC = -45;
+  const maxC = 55;
+  const minF = cToF(minC);
+  const maxF = cToF(maxC);
+
+  const vbW = 200;
   const vbH = 220;
+  const stemCx = vbW / 2;
   const bulbCy = vbH - 22;
   const bulbR = 18;
-  const stemX = 27;
   const stemW = 18;
-  const stemTop = 28;
+  const stemX = stemCx - stemW / 2;
+  const stemTop = 36;
   const stemBottom = bulbCy - bulbR + 2;
   const innerPad = 3;
   const innerTop = stemTop + innerPad;
   const innerBottom = stemBottom - innerPad;
   const innerH = innerBottom - innerTop;
 
-  const t =
-    current == null || Number.isNaN(current)
+  const tC =
+    tempC == null || Number.isNaN(tempC)
       ? null
-      : Math.min(max, Math.max(min, current));
+      : Math.min(maxC, Math.max(minC, tempC));
   const fillRatio =
-    t == null || max === min ? 0 : (t - min) / (max - min);
+    tC == null || maxC === minC ? 0 : (tC - minC) / (maxC - minC);
   const fillH = fillRatio * innerH;
   const fillY = innerBottom - fillH;
+
+  const labelCMaxX = stemX - 8;
+  const labelCMinX = stemX - 8;
+  const labelFMaxX = stemX + stemW + 8;
+  const labelFMinX = stemX + stemW + 8;
 
   return (
     <div
       style={{
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 8,
+        flexDirection: "row",
+        alignItems: "flex-end",
+        justifyContent: "center",
+        gap: 16,
+        marginTop: 12,
+        marginBottom: 12,
       }}
     >
-      <span style={{ fontSize: 13, fontWeight: 600 }}>{label}</span>
+      <div
+        style={{
+          textAlign: "right",
+          minWidth: 72,
+          paddingBottom: 8,
+        }}
+      >
+        <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>C</p>
+        <p style={{ margin: "6px 0 0", fontSize: 18, fontWeight: 600 }}>
+          {tC != null ? `${tC}°C` : "—"}
+        </p>
+      </div>
+
       <svg
-        width={90}
+        width={vbW}
         height={vbH}
         viewBox={`0 0 ${vbW} ${vbH}`}
         role="img"
         aria-label={
-          t == null
-            ? `${label} thermometer, no reading`
-            : `${label} thermometer, ${t}°${unit}, between ${min} and ${max}`
+          tC == null
+            ? "Thermometer, no reading"
+            : `Thermometer ${tC}°C, ${tempF}°F, scales ${minC}–${maxC}°C`
         }
       >
-        <title>
-          {t == null
-            ? `${label}`
-            : `${t}°${unit} (scale ${min}–${max}°${unit})`}
-        </title>
-        {/* stem outline */}
+        <title>Thermometer</title>
         <rect
           x={stemX}
           y={stemTop}
@@ -63,24 +87,21 @@ function ThermometerScale({ unit, current, min, max, label }) {
           stroke="#9aa0a6"
           strokeWidth={1.5}
         />
-        {/* bulb outline */}
         <circle
-          cx={vbW / 2}
+          cx={stemCx}
           cy={bulbCy}
           r={bulbR}
           fill="#e8eaed"
           stroke="#9aa0a6"
           strokeWidth={1.5}
         />
-        {/* mercury bulb */}
         <circle
-          cx={vbW / 2}
+          cx={stemCx}
           cy={bulbCy}
           r={bulbR - 5}
-          fill={t == null ? "#ccc" : "#c62828"}
+          fill={tC == null ? "#ccc" : "#c62828"}
         />
-        {/* mercury column */}
-        {t != null && fillH > 0 && (
+        {tC != null && fillH > 0 && (
           <rect
             x={stemX + innerPad}
             y={fillY}
@@ -89,65 +110,59 @@ function ThermometerScale({ unit, current, min, max, label }) {
             fill="#c62828"
           />
         )}
-        {/* max tick (top) */}
-        <text x={stemX + stemW + 6} y={stemTop + 4} fontSize={11} fill="#444">
-          {max}°{unit}
+
+        {/* Min/max labels only — horizontal ticks read like an extra minus before negative °C */}
+        <text
+          x={labelCMaxX}
+          y={stemTop + 4}
+          fontSize={11}
+          fill="#444"
+          textAnchor="end"
+        >
+          {maxC}°C
         </text>
-        {/* min tick (bottom of stem) */}
-        <text x={stemX + stemW + 6} y={stemBottom + 4} fontSize={11} fill="#444">
-          {min}°{unit}
+        <text
+          x={labelFMaxX}
+          y={stemTop + 4}
+          fontSize={11}
+          fill="#444"
+          textAnchor="start"
+        >
+          {Math.round(maxF)}°F
         </text>
-        {/* current value */}
-        {t != null && (
-          <text
-            x={vbW / 2}
-            y={stemTop - 6}
-            textAnchor="middle"
-            fontSize={13}
-            fontWeight={600}
-            fill="#1a1a1a"
-          >
-            {t}°{unit}
-          </text>
-        )}
+
+        <text
+          x={labelCMinX}
+          y={stemBottom + 4}
+          fontSize={11}
+          fill="#444"
+          textAnchor="end"
+        >
+          {minC}°C
+        </text>
+        <text
+          x={labelFMinX}
+          y={stemBottom + 4}
+          fontSize={11}
+          fill="#444"
+          textAnchor="start"
+        >
+          {Math.round(minF)}°F
+        </text>
       </svg>
-    </div>
-  );
-}
 
-
-const Termometer = ({ temperature }) => {
-  const { tempC, tempF } = temperature || {};
-
-  let minC = -45;
-  let maxC = 55;
-  let minF = -50;
-  let maxF = 130;
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 32,
-        marginTop: 12,
-        marginBottom: 12,
-      }}
-    >
-      <ThermometerScale
-        unit="C"
-        current={tempC}
-        min={minC}
-        max={maxC}
-        label="Celsius"
-      />
-      <ThermometerScale
-        unit="F"
-        current={tempF}
-        min={minF}
-        max={maxF}
-        label="Fahrenheit"
-      />
+      <div
+        style={{
+          textAlign: "left",
+          minWidth: 72,
+          paddingBottom: 8,
+        }}
+      >
+        <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>F</p>
+        <p style={{ margin: "6px 0 0", fontSize: 18, fontWeight: 600 }}>
+          {tempF != null && !Number.isNaN(tempF) ? `${tempF}°F` : "—"}
+        </p>
+      </div>
     </div>
   );
 };
