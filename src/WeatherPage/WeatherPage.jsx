@@ -17,7 +17,7 @@ const WeatherPage = () => {
   const endpoint = 'v1/current.json';
   const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
   const cityParam = 'q';
-  const city = 'London';
+  const city = 'Jahra';
   const airParam = 'aqi';
   const includeAir = 'yes';
   console.log('render')
