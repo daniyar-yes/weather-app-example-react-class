@@ -18,7 +18,7 @@ const LocationCard = ({ responseLocation }) => {
         <div>Region: {region}</div>
         <div>Timezone: {timeZone}</div>
         <div>Lat: {coordinates.lat}, Lon: {coordinates.lon}</div>
-        <div>Local dat & time: {localTime}</div>
+        <div>Local date & time: {localTime}</div>
 
     </div>
   )
