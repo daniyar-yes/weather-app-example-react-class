@@ -1,0 +1,59 @@
+.loadingSpinner {
+    margin-left: 30vw;
+    margin-top: 10vh; 
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(18, 2, 2, 0.3);
+    border-radius: 50%;
+    border-top-color: #07031d;
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+  }
+  @-webkit-keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+  }
+
+  .mapImg{
+    max-width: 500px;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  .visualsContainer{
+    position: relative;
+    width: 350px; 
+    aspect-ratio: 2 / 1;
+  }
+
+  .mapSvg{
+    position: absolute;
+    z-index: 10;
+    width: 72%;
+    height: 72%;
+    top: 10px;
+    left: 63px;
+  }
+
+  .pin {
+    position: absolute;
+    top: 10;
+    left: 10;
+    z-index: 50;
+  }
+
+  .mapLegend {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly 
+  }

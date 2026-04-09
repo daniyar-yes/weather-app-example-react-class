@@ -1,27 +1,29 @@
-import React from 'react'
+import React from "react";
+import GeoLocation from "./GeoLocation/GeoLocation";
 
-const LocationCard = ({ responseLocation }) => {
+const LocationCard = ({ responseLocation, isDay }) => {
+  if (!responseLocation) return;
 
-    if (!responseLocation) return;
-
-    const name = responseLocation?.name;
-    const country = responseLocation?.country;
-    const region = responseLocation?.region;
-    const timeZone = responseLocation?.tz_id;
-    const coordinates = { lat: responseLocation?.lat, lon: responseLocation?.lon }
-    const localTime = responseLocation?.localtime;
+  const name = responseLocation?.name;
+  const country = responseLocation?.country;
+  const region = responseLocation?.region;
+  const timeZone = responseLocation?.tz_id;
+  const coordinates = {
+    lat: responseLocation?.lat,
+    lon: responseLocation?.lon,
+  };
+  const localTime = responseLocation?.localtime;
 
   return (
     <div>
-        <div>City: {name}</div>
-        <div>Country: {country}</div>
-        <div>Region: {region}</div>
-        <div>Timezone: {timeZone}</div>
-        <div>Lat: {coordinates.lat}, Lon: {coordinates.lon}</div>
-        <div>Local date & time: {localTime}</div>
-
+      <GeoLocation city={name} lat={coordinates.lat} lon={coordinates.lon} isDay={isDay}/>
+      <br></br>
+      <div>Country: {country}</div>
+      <div>Region: {region}</div>
+      <div>Timezone: {timeZone}</div>
+      <div>Local date & time: {localTime}</div>
     </div>
-  )
-}
+  );
+};
 
-export default LocationCard
+export default LocationCard;

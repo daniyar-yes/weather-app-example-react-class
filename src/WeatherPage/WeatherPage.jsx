@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import LocationCard from "./LocationCard/LocationCard";
 import Termometer from "./Termometer/Termometer";
 import Search from "./Search/Search";
+import CurrentCondition from "./CurrentCondition/CurrentCondition";
 
 const WeatherPage = () => {
   /** Bumps on each "refresh" click so useEffect deps change without meaningless true/false flips. */
@@ -12,6 +13,8 @@ const WeatherPage = () => {
 
   const [responseLocation, setResponseLocation] = useState(null);
   const [temperature, setTemperature] = useState({ tempC: null, tempF: null });
+
+  const [isDay, setIsDay] = useState(null);
 
   const [city, setCity] = useState("Dallas");
   const [includeAqi, setIncludeAqi] = useState(true);
@@ -51,6 +54,7 @@ const WeatherPage = () => {
         tempC: result?.current?.temp_c,
         tempF: result?.current?.temp_f,
       });
+      setIsDay(result?.current?.is_day);
     }
 
     loadWeather();
@@ -64,24 +68,18 @@ const WeatherPage = () => {
         includeAqi={includeAqi}
         onIncludeAqiChange={setIncludeAqi}
         onSubmit={handleClick}
+        isDay={isDay}
       />
 
       {conditionImg && conditionText ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img src={conditionImg} alt="" />
-          <p>Currently: {conditionText}</p>
-        </div>
+        <CurrentCondition
+          conditionImg={conditionImg}
+          conditionText={conditionText}
+        />
       ) : null}
-      
-      <Termometer temperature={temperature} />
-      <LocationCard responseLocation={responseLocation} />
+
+      <Termometer temperature={temperature} isDay={isDay} />
+      <LocationCard responseLocation={responseLocation} isDay={isDay} />
     </>
   );
 };

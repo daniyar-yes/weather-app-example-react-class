@@ -6,8 +6,9 @@ const Search = ({
   includeAqi,
   onIncludeAqiChange,
   onSubmit,
+  isDay
 }) => (
-  <>
+  <div style={{background: isDay ? 'yellow' : 'blue', padding: '10px'}}>
     <input
       type="text"
       value={city}
@@ -27,7 +28,7 @@ const Search = ({
     <button type="button" onClick={onSubmit} style={{ marginLeft: 8 }}>
       Call Back-End
     </button>
-  </>
+  </div>
 );
 
 export default Search;
