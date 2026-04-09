@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { IsDayContext } from "../../../IsDayContext";
 
 /** Local coords centered on (0,0) — parent <g transform="translate(cxPx, cyPx)"> matches old circle cx/cy. */
 function Sun() {
@@ -45,8 +46,11 @@ function Moon() {
   );
 }
 
-const SunMoon = ({ isDay }) => (
-  <g style={{ pointerEvents: "none" }}>{isDay ? <Sun /> : <Moon />}</g>
-);
+const SunMoon = () => {
+  const isDay = useContext(IsDayContext);
+  return (
+    <g style={{ pointerEvents: "none" }}>{isDay ? <Sun /> : <Moon />}</g>
+  );
+};
 
 export default SunMoon;

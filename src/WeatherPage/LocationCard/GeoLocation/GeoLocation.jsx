@@ -5,7 +5,7 @@ import SunMoon from "./SunMoon/SunMoon";
 const ICON = 12;
 const ICON_HALF = ICON / 2;
 
-const GeoLocation = ({ city, lat, lon, isDay=true }) => {
+const GeoLocation = ({ city, lat, lon }) => {
   const lonFactorX = (lon / 360) * 100;
   const latFactorY = (lat / 180) * 100;
 
@@ -28,7 +28,7 @@ const GeoLocation = ({ city, lat, lon, isDay=true }) => {
             overflow="visible"
             style={{ overflow: "visible" }}
           >
-            <SunMoon isDay={isDay} />
+            <SunMoon />
           </svg>
         </svg>
       </div>

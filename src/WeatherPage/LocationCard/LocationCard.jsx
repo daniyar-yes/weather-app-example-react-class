@@ -1,7 +1,7 @@
 import React from "react";
 import GeoLocation from "./GeoLocation/GeoLocation";
 
-const LocationCard = ({ responseLocation, isDay }) => {
+const LocationCard = ({ responseLocation }) => {
   if (!responseLocation) return;
 
   const name = responseLocation?.name;
@@ -16,7 +16,7 @@ const LocationCard = ({ responseLocation, isDay }) => {
 
   return (
     <div>
-      <GeoLocation city={name} lat={coordinates.lat} lon={coordinates.lon} isDay={isDay}/>
+      <GeoLocation city={name} lat={coordinates.lat} lon={coordinates.lon} />
       <br></br>
       <div>Country: {country}</div>
       <div>Region: {region}</div>

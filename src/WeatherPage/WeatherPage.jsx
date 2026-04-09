@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { IsDayContext } from "./IsDayContext";
 import LocationCard from "./LocationCard/LocationCard";
 import Termometer from "./Termometer/Termometer";
 import Search from "./Search/Search";
@@ -61,14 +62,13 @@ const WeatherPage = () => {
   }, [apiKey, fetchVersion]);
 
   return (
-    <>
+    <IsDayContext.Provider value={isDay}>
       <Search
         city={city}
         onCityChange={setCity}
         includeAqi={includeAqi}
         onIncludeAqiChange={setIncludeAqi}
         onSubmit={handleClick}
-        isDay={isDay}
       />
 
       {conditionImg && conditionText ? (
@@ -78,9 +78,9 @@ const WeatherPage = () => {
         />
       ) : null}
 
-      <Termometer temperature={temperature} isDay={isDay} />
-      <LocationCard responseLocation={responseLocation} isDay={isDay} />
-    </>
+      <Termometer temperature={temperature} />
+      <LocationCard responseLocation={responseLocation} />
+    </IsDayContext.Provider>
   );
 };
 

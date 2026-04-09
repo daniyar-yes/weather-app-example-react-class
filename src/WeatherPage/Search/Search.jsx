@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { IsDayContext } from "../IsDayContext";
 
 const Search = ({
   city,
@@ -6,8 +7,9 @@ const Search = ({
   includeAqi,
   onIncludeAqiChange,
   onSubmit,
-  isDay
-}) => (
+}) => {
+  const isDay = useContext(IsDayContext);
+  return (
   <div style={{background: isDay ? 'yellow' : 'blue', padding: '10px'}}>
     <input
       type="text"
@@ -29,6 +31,7 @@ const Search = ({
       Call Back-End
     </button>
   </div>
-);
+  );
+};
 
 export default Search;
