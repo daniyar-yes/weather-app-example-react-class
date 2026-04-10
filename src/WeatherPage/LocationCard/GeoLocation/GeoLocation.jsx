@@ -1,5 +1,6 @@
 import styles from "./GeoLocation.module.css";
 import SunMoon from "./SunMoon/SunMoon";
+import mapGif from '../../../assets/map.gif'
 
 /** Nested <svg> size; top-left offset by half so center matches old circle cx/cy (same % viewport). */
 const ICON = 12;
@@ -17,7 +18,7 @@ const GeoLocation = ({ city, lat, lon }) => {
   return (
     <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
       <div className={styles.visualsContainer}>
-        <img src="/src/assets/map.gif" alt="map" className={styles.mapImg} />
+        <img src={mapGif} alt="map" className={styles.mapImg} />
         <svg className={styles.mapSvg}>
           <svg
             x={iconX}
