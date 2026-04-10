@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
+import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import { IsDayContext } from "./IsDayContext";
 import LocationCard from "./LocationCard/LocationCard";
-import Termometer from "./Termometer/Termometer";
+import Thermometer from "./Thermometer/Thermometer";
 import Search from "./Search/Search";
 import CurrentCondition from "./CurrentCondition/CurrentCondition";
+
+const navLinkStyle = ({ isActive }) => ({
+  fontWeight: isActive ? 700 : 400,
+  textDecoration: isActive ? "underline" : "none",
+});
 
 const WeatherPage = () => {
   /** Bumps on each "refresh" click so useEffect deps change without meaningless true/false flips. */
@@ -59,27 +65,80 @@ const WeatherPage = () => {
     }
 
     loadWeather();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refetch only when `fetchVersion` changes (button); omit city/includeAqi to avoid a request on every keystroke
   }, [apiKey, fetchVersion]);
+
+  const missingCondition = !conditionImg || !conditionText;
+  const missingLocation = !responseLocation;
 
   return (
     <IsDayContext.Provider value={isDay}>
-      <Search
-        city={city}
-        onCityChange={setCity}
-        includeAqi={includeAqi}
-        onIncludeAqiChange={setIncludeAqi}
-        onSubmit={handleClick}
-      />
-
-      {conditionImg && conditionText ? (
-        <CurrentCondition
-          conditionImg={conditionImg}
-          conditionText={conditionText}
+      <div style={{ padding: 16 }}>
+        <Search
+          city={city}
+          onCityChange={setCity}
+          includeAqi={includeAqi}
+          onIncludeAqiChange={setIncludeAqi}
+          onSubmit={handleClick}
         />
-      ) : null}
 
-      <Termometer temperature={temperature} />
-      <LocationCard responseLocation={responseLocation} />
+        <nav
+          style={{
+            display: "flex",
+            gap: 12,
+            flexWrap: "wrap",
+            marginTop: 12,
+            marginBottom: 12,
+          }}
+        >
+          <NavLink to="/" end style={navLinkStyle}>
+            Home
+          </NavLink>
+          <NavLink to="/thermometer" style={navLinkStyle}>
+            Thermometer
+          </NavLink>
+          <NavLink to="/location" style={navLinkStyle}>
+            Location
+          </NavLink>
+        </nav>
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                {!missingCondition ? (
+                  <CurrentCondition
+                    conditionImg={conditionImg}
+                    conditionText={conditionText}
+                  />
+                ) : null}
+                <Thermometer temperature={temperature} />
+                <LocationCard responseLocation={responseLocation} />
+              </>
+            }
+          />
+          <Route
+            path="/thermometer"
+            element={<Thermometer temperature={temperature} />}
+          />
+          <Route
+            path="/location"
+            element={
+              missingLocation ? (
+                <p style={{ marginTop: 8 }}>
+                  No location data yet. Click <strong>Call Back-End</strong>.
+                </p>
+              ) : (
+                <LocationCard responseLocation={responseLocation} />
+              )
+            }
+          />
+          {/* Must be above `path="*"`, or the splat catches /house and sends users to "/" */}
+          <Route path="/house" element={<Navigate to="/thermometer" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
     </IsDayContext.Provider>
   );
 };

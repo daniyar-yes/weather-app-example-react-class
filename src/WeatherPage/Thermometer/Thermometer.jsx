@@ -4,7 +4,7 @@ function cToF(c) {
   return (c * 9) / 5 + 32;
 }
 
-const Termometer = ({ temperature }) => {
+const Thermometer = ({ temperature }) => {
   const { tempC, tempF } = temperature || {};
 
   const minC = -45;
@@ -167,4 +167,4 @@ const Termometer = ({ temperature }) => {
   );
 };
 
-export default Termometer;
+export default Thermometer;

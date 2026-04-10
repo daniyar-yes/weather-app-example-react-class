@@ -1,14 +1,12 @@
-import WeatherPage from "./WeatherPage/WeatherPage"
-
+import { Route, Routes } from "react-router-dom";
+import WeatherPage from "./WeatherPage/WeatherPage";
 
 function App() {
-
-
   return (
-    <>
-     <WeatherPage />
-    </>
-  )
+    <Routes>
+      <Route path="/*" element={<WeatherPage />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
