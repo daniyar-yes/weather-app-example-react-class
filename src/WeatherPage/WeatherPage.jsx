@@ -136,7 +136,6 @@ const WeatherPage = () => {
           />
           {/* Must be above `path="*"`, or the splat catches /house and sends users to "/" */}
           <Route path="/house" element={<Navigate to="/thermometer" replace />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </IsDayContext.Provider>
